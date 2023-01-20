@@ -23,6 +23,15 @@ app.use(morgan(function (tokens, req, res) {
 }))
 PersonsApi(app)
 InfoApi(app)
+app.use((error, req, res, next) => {
+  console.error(error)
+  console.log(error.name)
+  if (error.name === 'CastError') {
+    res.status(404).send({ error: 'id used is malformed' }).end()
+  } else {
+    res.status(500).end()
+  }
+})
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)

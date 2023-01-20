@@ -1,4 +1,3 @@
-const { del } = require('express/lib/application')
 const { Schema, model } = require('mongoose')
 
 /**

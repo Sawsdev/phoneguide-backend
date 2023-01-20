@@ -2,25 +2,29 @@ const { PersonsService } = require('./service')
 const mongoose = require('mongoose')
 const Person = require('../models/Person')
 module.exports.PersonsController = {
-  getPersons: (req, res) => {
+  getPersons: (req, res, next) => {
     Person.find({})
       .then(result => {
         mongoose.connection.close()
         res.status(200).send(result).end()
       })
       .catch(err => {
-        console.log(err)
+        next(err)
       })
     // res.status(200).send(PersonsService.getAllPersons()).end()
   },
-  getPerson: (req, res) => {
+  getPerson: (req, res, next) => {
     const {
       params: { id }
     } = req
-    const person = PersonsService.getPerson(Number(id))
-    !person
-      ? res.status(404).send('Person not found').end()
-      : res.status(200).json(person).end()
+    Person.findById(id)
+      .then(person => {
+        !person
+          ? res.status(404).send('Person not found').end()
+          : res.status(200).json(person).end()
+      })
+      .catch(err => next(err))
+    // PersonsService.getPerson(Number(id))
   },
   deletePerson: (req, res) => {
     const {
@@ -34,21 +38,28 @@ module.exports.PersonsController = {
       ? res.status(404).send('Person not found').end()
       : res.status(200).send(deletedPerson).end()
   },
-  createPerson: (req, res) => {
+  createPerson: (req, res, next) => {
     const {
       body
     } = req
     if (!body.name || !body.number) {
       return res.status(400).send({ error: 'No data provided' }).end()
     }
-    const newPerson = {
+    const newPerson = new Person({
       name: body.name,
       number: body.number
-    }
-    const alreadyExist = PersonsService.createPerson(newPerson)
-    console.log(alreadyExist)
-    !alreadyExist
-      ? res.status(409).send({ error: 'names must be unique' }).end()
-      : res.status(200).send(alreadyExist).end()
+    })
+    newPerson.save().then(person => {
+      console.log('Person saved')
+      console.log(person)
+      mongoose.connection.close()
+      res.status(200).send({ success: 'Created new phoneguide entry!' }).end()
+    })
+      .catch(err => next(err))
+    // const alreadyExist = PersonsService.createPerson(newPerson)
+    // console.log(alreadyExist)
+    // !alreadyExist
+    //   ? res.status(409).send({ error: 'names must be unique' }).end()
+    //   : res.status(200).send(alreadyExist).end()
   }
 }
