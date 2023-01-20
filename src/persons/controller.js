@@ -1,8 +1,17 @@
 const { PersonsService } = require('./service')
-
+const mongoose = require('mongoose')
+const Person = require('../models/Person')
 module.exports.PersonsController = {
   getPersons: (req, res) => {
-    res.status(200).send(PersonsService.getAllPersons()).end()
+    Person.find({})
+      .then(result => {
+        mongoose.connection.close()
+        res.status(200).send(result).end()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    // res.status(200).send(PersonsService.getAllPersons()).end()
   },
   getPerson: (req, res) => {
     const {

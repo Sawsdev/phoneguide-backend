@@ -1,7 +1,8 @@
+const { dbConnService } = require('./src/mongo')
+dbConnService.dbConnect()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-
 const { PersonsApi } = require('./src/persons')
 const { InfoApi } = require('./src/info')
 const app = express()
