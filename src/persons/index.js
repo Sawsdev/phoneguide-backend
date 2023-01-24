@@ -8,5 +8,6 @@ module.exports.PersonsApi = (app) => {
     .get('/:id', PersonsController.getPerson)
     .delete('/:id', PersonsController.deletePerson)
     .post('/', PersonsController.createPerson)
+    .put('/:id', PersonsController.updatePerson)
   app.use('/persons', router)
 }

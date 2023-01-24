@@ -4,8 +4,8 @@ const { Schema, model } = require('mongoose')
  * Schema para personas en la agenda
  */
 const personSchema = Schema({
-  name: String,
-  number: String
+  name: { type: String, unique: true, minLength: 3 },
+  number: { type: String, min: 8 }
 })
 
 personSchema.set('toJSON', {

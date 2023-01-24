@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 const { PersonsApi } = require('./src/persons')
 const { InfoApi } = require('./src/info')
+const errorMiddleware = require('./src/middlewares/errorHandler')
+const notFound = require('./src/middlewares/notFound')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -23,15 +25,8 @@ app.use(morgan(function (tokens, req, res) {
 }))
 PersonsApi(app)
 InfoApi(app)
-app.use((error, req, res, next) => {
-  console.error(error)
-  console.log(error.name)
-  if (error.name === 'CastError') {
-    res.status(404).send({ error: 'id used is malformed' }).end()
-  } else {
-    res.status(500).end()
-  }
-})
+app.use(notFound)
+app.use(errorMiddleware)
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
