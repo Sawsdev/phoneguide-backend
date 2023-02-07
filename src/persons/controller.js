@@ -83,17 +83,12 @@ module.exports.PersonsController = {
       name: body.name,
       number: body.number
     }
-    Person.findByIdAndUpdate(id, newPerson, { new: true }).then(person => {
+    Person.findByIdAndUpdate(id, newPerson, { new: true }, { runValidators: true }).then(person => {
       console.log('Person saved')
       console.log(person)
       mongoose.connection.close()
       res.json(person).end()
     })
       .catch(err => next(err))
-    // const alreadyExist = PersonsService.createPerson(newPerson)
-    // console.log(alreadyExist)
-    // !alreadyExist
-    //   ? res.status(409).send({ error: 'names must be unique' }).end()
-    //   : res.status(200).send(alreadyExist).end()
   }
 }

@@ -12,19 +12,9 @@ const dbConnect = () => {
     })
 }
 
+process.on('uncaughtException', () => {
+  mongoose.connection.disconnect()
+})
 module.exports.dbConnService = {
   dbConnect
 }
-// const person = new Person({
-//   name: 'Dark the crusher',
-//   number: '+(52)999-632145'
-// })
-
-// person.save()
-//   .then(result => {
-//     console.log(result)
-//     mongoose.connection.close()
-//   })
-//   .catch(err => {
-//     console.log(err)
-//   })
