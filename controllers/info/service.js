@@ -1,4 +1,4 @@
-const { PersonsService } = require('../persons/service')
+const { PersonsService } = require('../../persons/service')
 const showApiInfo = () => {
   const persons = PersonsService.getAllPersons()
   return `Phonebook has info for ${persons.length} persons

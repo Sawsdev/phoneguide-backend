@@ -1,4 +1,3 @@
-const { dbConnService } = require('../mongo')
 const mongoose = require('mongoose')
 const Person = require('../models/Person')
 let persons = [
